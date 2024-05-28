@@ -5,13 +5,14 @@
   "main": "button.js",
   "module": "main.js",
   "scripts": {
-    "build": "webpack",
-    "serve": "webpack serve"
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && webpack",
+    "serve": "set NODE_OPTIONS=--openssl-legacy-provider && webpack serve --host 0.0.0.0"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lit-element": "^2.3.1"
+    "lit-element": "^2.3.1",
+    "react-scripts": "^5.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
