@@ -1,39 +1,37 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Test Become button</title>
-  <script src="./button.js"></script>
-</head>
-<body>
-<become-button token="<YOUR_JWT_HERE>"
-userId="<YOUR_USER_ID_HERE>" contractId="1" color="blue" language="en"
-></become-button>
-  <script type="text/javascript">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Test Become button</title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      const query = new URLSearchParams(location.search);
+      // create button
+      const button = document.createElement("become-button");
 
-    const query = new URLSearchParams(location.search);
-    // create button
-    const button = document.createElement("become-button");
+      // setup attributes
+      button.setAttribute("clientid", query.get("clientid"));
+      button.setAttribute("token", query.get("token"));
 
-    // setup attributes
-    button.setAttribute("clientid", query.get("clientid"));
-    button.setAttribute("token", query.get("token"));
+      // setup callbacks
+      button.addEventListener("become:loaded", ({ detail }) => {
+        console.log("loaded payload", detail);
+      });
+      button.addEventListener("become:userFinishedSdk", ({ detail }) => {
+        console.log("finished payload", detail);
+      });
+      button.addEventListener("become:exitedSdk", ({ detail }) => {
+        console.log("exited payload", detail);
+      });
 
-    // setup callbacks
-    button.addEventListener('become:loaded', ({ detail }) => {
-      console.log('loaded payload', detail)
-    })
-    button.addEventListener('become:userFinishedSdk', ({ detail }) => {
-      console.log('finished payload', detail)
-    })
-    button.addEventListener('become:exitedSdk', ({ detail }) => {
-      console.log('exited payload', detail)
-    })
-
-    // init button
-    document.body.appendChild(button);
-  </script>
-</body>
+      // init button
+      document.body.appendChild(button);
+    </script>
+  </body>
 </html>
