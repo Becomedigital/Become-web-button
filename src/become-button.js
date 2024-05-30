@@ -54,8 +54,16 @@ export default class BecomeButton extends LitElement {
     [this.language] = navigator.language.split("-");
     this.metadata = null;
 
+    this.handleFrameMessages = this.handleFrameMessages.bind(this);
+
     this.addEventListener("click", this.openIframe);
-    window.addEventListener("message", this.handleFrameMessages.bind(this));
+    window.addEventListener("message", this.handleFrameMessages);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener("message", this.handleFrameMessages);
+    this.removeEventListener("click", this.openIframe);
   }
 
   get metadata() {
@@ -70,7 +78,6 @@ export default class BecomeButton extends LitElement {
     try {
       let parsedData;
 
-      // Check if data is already an object
       if (typeof data === "string") {
         parsedData = JSON.parse(data);
       } else if (typeof data === "object") {
@@ -85,11 +92,9 @@ export default class BecomeButton extends LitElement {
 
       const { action, payload } = parsedData;
 
-      // Check if action is defined and is a string
       if (typeof action === "string" && action.includes("::")) {
         const [, actionName] = action.split("::");
         switch (actionName) {
-          // Handle different actions
           case Events.loaded:
             this.disabled = false;
             this.loading = false;
@@ -142,7 +147,6 @@ export default class BecomeButton extends LitElement {
     }
     window.document.body.appendChild(frame);
 
-    // Force re-enable button and allow user to retry the click.
     setTimeout(() => {
       this.disabled = false;
       this.loading = false;
@@ -150,10 +154,10 @@ export default class BecomeButton extends LitElement {
   }
 
   async firstUpdated() {
-    const api = `${this.apiHost}/api/v1/merchants/me`;
-    const headers = {
-      authorization: `Bearer ${this.clientId}`,
-    };
+    // const api = `${this.apiHost}/api/v1/merchants/me`;
+    // const headers = {
+    //   authorization: `Bearer ${this.clientId}`,
+    // };
     try {
       /*const response = await fetch(api, { headers });
       const {
