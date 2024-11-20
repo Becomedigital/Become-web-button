@@ -8,16 +8,28 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Test Become button</title>
+    <script src="https://onboarding.svi.becomedigital.net/resources/button.js"></script>
   </head>
   <body>
+    <become-button
+      token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcxODI5NTU4NCwianRpIjoiMTZmNjY5MjctMzVlOS00ZmFhLWEwNDQtMzkzYzdjNzI4OWZlIiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5Ijp7ImNsaWVudF9pZCI6ImJlY29tZV9kaWdpdGFsIiwiY29tcGFueV9pZCI6MSwiaXNfZGFzaGJvYXJkX3VzZXIiOmZhbHNlLCJpc19yZXZpZXdlciI6ZmFsc2UsImlzX2FjdGl2ZSI6dHJ1ZSwicm9sZV9pZCI6NCwicGVybWlzc2lvbiI6bnVsbCwiY29tcGFueV9pbmZvIjp7ImNvbXBhbnlfY291bnRyeSI6IkNPIiwiY29tcGFueV9zdGF0ZSI6IkNPIiwiY29tcGFueV9hZGRyZXNzIjoiQyIsImNvbXBhbnlfbGVnYWxfcmVwcmVzZW50YXRpdmUiOiJDIiwiY29tcGFueV9waG9uZSI6IjMifX0sIm5iZiI6MTcxODI5NTU4NCwiZXhwIjoxNzIwODg3NTg0fQ.Z7D1EsW2oxBJTphfuC68g9DmH7-Tf3gk5u7uTo-ao9g"
+      userId="demo"
+      country="US"
+      state="FL"
+      contractId="1"
+      color="blue"
+      language="es"
+      class="be-button"
+      id="becomeButton"
+    ></become-button>
     <script type="text/javascript">
       const query = new URLSearchParams(location.search);
       // create button
       const button = document.createElement("become-button");
-
       // setup attributes
-      button.setAttribute("clientid", query.get("clientid"));
+      button.setAttribute("userId", query.get("clientid"));
       button.setAttribute("token", query.get("token"));
+      button.setAttribute("contractId", query.get("contractid"));
 
       // setup callbacks
       button.addEventListener("become:loaded", ({ detail }) => {
@@ -32,6 +44,17 @@
 
       // init button
       document.body.appendChild(button);
+      const button2 = document.getElementById("becomeButton");
+      // setup callbacks
+      button2.addEventListener("become:loaded", ({ detail }) => {
+        console.log("loaded payload", detail);
+      });
+      button2.addEventListener("become:userFinishedSdk", ({ detail }) => {
+        console.log("finished payload", detail);
+      });
+      button2.addEventListener("become:exitedSdk", ({ detail }) => {
+        console.log("exited payload", detail);
+      });
     </script>
   </body>
 </html>
