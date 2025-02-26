@@ -1,39 +1,84 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Test Become button</title>
-  <script src="./button.js"></script>
-</head>
-<body>
-<become-button token="<YOUR_JWT_HERE>"
-userId="<YOUR_USER_ID_HERE>" contractId="1" color="blue" language="en"
-></become-button>
-  <script type="text/javascript">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Test Become button</title>
+    <script src="./button.js"></script>
+  </head>
+  <body>
+    <!--docType full list, same behaviour if ommited-->
+    <become-button
+      token="<YOUR_JWT_HERE>"
+      userId="<YOUR_USER_ID_HERE>"
+      contractId="1"
+      docType="national-id,passport,driving-license" 
+      color="blue"
+      language="en"
+    ></become-button>
+    <script type="text/javascript">
+      const query = new URLSearchParams(location.search);
+      // create button
+      const button = document.createElement("become-button");
 
-    const query = new URLSearchParams(location.search);
-    // create button
-    const button = document.createElement("become-button");
+      // setup attributes
+      button.setAttribute("clientid", query.get("clientid"));
+      button.setAttribute("token", query.get("token"));
 
-    // setup attributes
-    button.setAttribute("clientid", query.get("clientid"));
-    button.setAttribute("token", query.get("token"));
+      // setup callbacks
+      button.addEventListener("become:loaded", ({ detail }) => {
+        console.log("loaded payload", detail);
+      });
+      button.addEventListener("become:frontDocumentImage", ({ detail }) => {
+        console.log("Front Image", detail);
+      });
+      button.addEventListener("become:backDocument", ({ detail }) => {
+        console.log("Back Image", detail);
+      });
+      button.addEventListener("become:selfieImage", ({ detail }) => {
+        console.log("Selfie Image", detail);
+      });
+      button.addEventListener("become:userFinishedSdk", ({ detail }) => {
+        console.log("finished payload", detail);
+      });
+      button.addEventListener("become:exitedSdk", ({ detail }) => {
+        console.log("exited payload", detail);
+      });
 
-    // setup callbacks
-    button.addEventListener('become:loaded', ({ detail }) => {
-      console.log('loaded payload', detail)
-    })
-    button.addEventListener('become:userFinishedSdk', ({ detail }) => {
-      console.log('finished payload', detail)
-    })
-    button.addEventListener('become:exitedSdk', ({ detail }) => {
-      console.log('exited payload', detail)
-    })
+      // init button
+      document.body.appendChild(button);
 
-    // init button
-    document.body.appendChild(button);
-  </script>
-</body>
+      // The functions below are for testing purposes only.
+      // It is recommended to pass the user ID from the backend
+      // to ensure proper tracking or to generate it according to the business rules.
+
+
+      // Function to generate a UUID
+      function generateUUID() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
+          c
+        ) {
+          var r = (Math.random() * 16) | 0,
+            v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+
+      // Function to set the UUID to the become-button element
+      function setUUID() {
+        const becomeButton = document.querySelector("become-button");
+        const uuid = generateUUID();
+        becomeButton.setAttribute("userId", uuid);
+      }
+
+      // Wait for the DOM to load before setting the UUID
+      document.addEventListener("DOMContentLoaded", (event) => {
+        setUUID();
+      });
+    </script>
+  </body>
 </html>
