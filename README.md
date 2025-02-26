@@ -160,4 +160,4 @@ Summary:
 
 ### Full Example:
 
-- Vanilla JS: see `index.html`
+- Vanilla JS: see [`index.html`](index.html)
