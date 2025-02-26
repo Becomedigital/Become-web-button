@@ -20,15 +20,13 @@ How It Looks on Your Page:
 
 ## Integration Steps
 
-- Add the Script
-  Include the following script in your HTML <head> or before the closing <body> tag:
+- Add the Script: Include the following script in your HTML <head> or before the closing <body> tag:
 
 ```html
 <script src="https://onboarding.svi.becomedigital.net/resources/button.js"></script>
 ```
 
-- Declare Required Attributes
-  Use the <become-button> custom element and provide the required attributes such as userId, contractId, and token:
+- Declare Required Attributes: Use the <become-button> custom element and provide the required attributes such as userId, contractId, and token:
 
 ```html
 <become-button
@@ -38,8 +36,7 @@ How It Looks on Your Page:
 />
 ```
 
-- Dynamically Create the Button with JavaScript
-  Alternatively, you can dynamically create the button using JavaScript, like so:
+- Dynamically Create the Button with JavaScript: Alternatively, you can dynamically create the button using JavaScript, like so:
 
 ```js
 const button = document.createElement("become-button");
