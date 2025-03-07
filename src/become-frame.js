@@ -8,6 +8,7 @@ export default class BecomeFrame extends LitElement {
             userId: {type: String},
             contractId: {type: String},
             country: {type: String},
+            docType: {type: String},
             state: {type: String},
             disabled: {type: Boolean, reflect: true},
             signupHost: {type: String},
@@ -43,7 +44,7 @@ export default class BecomeFrame extends LitElement {
 
     render() {
         const url = new URL(this.signupHost);
-        [["accessToken", this.token], ["userId", this.userId], ["contractId", this.contractId], ["country", this.country], ["state", this.state]]
+        [["accessToken", this.token], ["userId", this.userId], ["contractId", this.contractId], ["country", this.country], ["state", this.state], ["docType", this.docType]]
             .filter(([unused, value]) => value)
             .forEach(([attr, value]) => url.searchParams.append(attr, value));
         return html`
