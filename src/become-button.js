@@ -24,6 +24,7 @@ export default class BecomeButton extends LitElement {
       token: { type: String },
       userId: { type: String },
       contractId: { type: String },
+      docType: { type: String },
       country: { type: String },
       state: { type: String },
       apiHost: { type: String },
@@ -50,7 +51,7 @@ export default class BecomeButton extends LitElement {
     this.disabled = true;
     this.loading = true;
     this.apiHost = "https://api.become.com";
-    this.signupHost = "https://onboarding.becomedigital.net/";
+    this.signupHost = "http://localhost:5173/";
     [this.language] = navigator.language.split("-");
     this.metadata = null;
 
@@ -142,6 +143,7 @@ export default class BecomeButton extends LitElement {
       "token",
       "country",
       "state",
+      "docType",
     ]) {
       this[key] && frame.setAttribute(key, this[key]);
     }
