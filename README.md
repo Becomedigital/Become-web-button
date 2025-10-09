@@ -161,3 +161,11 @@ Summary:
 ### Full Example:
 
 - Vanilla JS: see [`index.html`](index.html)
+
+### API Documentation:
+
+You can find the API documentation at the following link:
+
+[API Documentacion](https://documenter.getpostman.com/view/2293906/T1DtdvBk)
+
+Note: The current documentation is in Spanish. We are working on a new version that will be available in both English and Spanish.
