@@ -51,7 +51,7 @@ export default class BecomeButton extends LitElement {
     this.disabled = true;
     this.loading = true;
     this.apiHost = "https://api.become.com";
-    this.signupHost = "http://localhost:5173/";
+    this.signupHost = "https://onboarding-v2.svi.becomedigital.net";
     [this.language] = navigator.language.split("-");
     this.metadata = null;
 
