@@ -13,7 +13,8 @@ export default class BecomeFrame extends LitElement {
       disabled: { type: Boolean, reflect: true },
       signupHost: { type: String },
       metadata: { type: String },
-      flowId: { type: String },
+      brand: { type: String },
+      flow: { type: String },
     };
   }
 
@@ -51,8 +52,10 @@ export default class BecomeFrame extends LitElement {
       ["docType", this.docType],
       ["country", this.country],
       ["state", this.state],
+      ["brand", this.brand],
+      ["flow", this.flow],
     ]
-      .filter(([unused, value]) => value)
+      .filter(([_, value]) => value)
       .forEach(([attr, value]) => url.searchParams.append(attr, value));
     return html`
       <iframe

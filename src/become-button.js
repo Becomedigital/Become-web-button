@@ -34,7 +34,8 @@ export default class BecomeButton extends LitElement {
       color: { type: String },
       language: { type: String },
       metadata: { type: String },
-      flowId: { type: String },
+      brand: { type: String },
+      flow: { type: String },
     };
   }
 
@@ -51,7 +52,7 @@ export default class BecomeButton extends LitElement {
     this.disabled = true;
     this.loading = true;
     this.apiHost = "https://api.become.com";
-    this.signupHost = "https://onboarding-v2.svi.becomedigital.net";
+    this.signupHost = "https://onboarding-demo3.svi.becomedigital.net";
     [this.language] = navigator.language.split("-");
     this.metadata = null;
 
@@ -144,6 +145,8 @@ export default class BecomeButton extends LitElement {
       "country",
       "state",
       "docType",
+      "brand",
+      "flow",
     ]) {
       this[key] && frame.setAttribute(key, this[key]);
     }
