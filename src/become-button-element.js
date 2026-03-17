@@ -1,7 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 import hexToHsl from "./hex-to-hsl";
 import "./become-spinner";
-import BecomeLogoURL from "./logo192.jpg";
 
 const DEFAULT_COLOR = "green";
 
@@ -35,7 +34,9 @@ export default class BecomeButtonElement extends LitElement {
       disabled: { type: Boolean },
       loading: { type: Boolean, reflect: true },
       language: { type: String },
-      color: { type: String }
+      color: { type: String },
+      logo: { type: String },
+      radius: { type: String }
     };
   }
 
@@ -145,7 +146,7 @@ export default class BecomeButtonElement extends LitElement {
 
   render() {
     return html`
-      <figure><img src="${BecomeLogoURL}" alt="Become" /></figure>
+      <figure><img src="${this.logo}" alt="Become" /></figure>
       <main>
         ${this.loading
           ? html`
@@ -162,6 +163,7 @@ export default class BecomeButtonElement extends LitElement {
     this.shadowRoot.querySelector("main").style.color = isDark(this.color)
       ? "white"
       : "black";
+    this.style.borderRadius = this.radius || "4px";
   }
 
   firstUpdated() {
@@ -169,7 +171,7 @@ export default class BecomeButtonElement extends LitElement {
   }
 
   updated(props) {
-    if (props.has("color")) {
+    if (props.has("color") || props.has("radius")) {
       this.updateStyles();
     }
   }

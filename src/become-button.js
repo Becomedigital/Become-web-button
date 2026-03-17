@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit-element";
 import "./become-button-element";
 import "./become-frame";
+import { getBrandConfig } from "./brand-config";
 
 const EventBase = "become";
 
@@ -51,8 +52,8 @@ export default class BecomeButton extends LitElement {
     super();
     this.disabled = true;
     this.loading = true;
-    this.apiHost = "https://api.become.com";
-    this.signupHost = "https://onboarding-demo3.svi.becomedigital.net";
+    this.apiHost = "https://api.svi.becomedigital.net";
+    this.signupHost = "https://aval.svi.becomedigital.net";
     [this.language] = navigator.language.split("-");
     this.metadata = null;
 
@@ -184,11 +185,14 @@ export default class BecomeButton extends LitElement {
   }
 
   render() {
+    const brandConfig = getBrandConfig(this.brand);
     return html`
       <become-button-element
         ?disabled="${this.disabled}"
         ?loading="${this.loading}"
-        color="${this.color}"
+        color="${brandConfig.colors.primary}"
+        logo="${brandConfig.logo}"
+        radius="${brandConfig.layout.radiusButton}"
         language="${this.language}"
       ></become-button-element>
     `;
