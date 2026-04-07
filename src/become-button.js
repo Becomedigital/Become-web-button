@@ -2,13 +2,13 @@ import { LitElement, html, css } from "lit-element";
 import "./become-button-element";
 import "./become-frame";
 
-const EventBase = 'become';
+const EventBase = "become";
 
 const Events = {
-  loaded: 'loaded',
-  error: 'errorSdk',
-  exitedSdk: 'exitedSdk',
-  userFinishedSdk: 'userFinishedSdk',
+  loaded: "loaded",
+  error: "errorSdk",
+  exitedSdk: "exitedSdk",
+  userFinishedSdk: "userFinishedSdk",
 };
 
 function htmlDecode(string) {
@@ -34,7 +34,7 @@ export default class BecomeButton extends LitElement {
       color: { type: String },
       language: { type: String },
       metadata: { type: String },
-      flowId: { type: String }
+      flowId: { type: String },
     };
   }
 
@@ -50,13 +50,23 @@ export default class BecomeButton extends LitElement {
     super();
     this.disabled = true;
     this.loading = true;
-    this.apiHost = "https://api.become.com";
+    this.apiHost = "https://api.svi.becomedigital.net";
     this.signupHost = "https://onboarding.svi.becomedigital.net/";
     [this.language] = navigator.language.split("-");
     this.metadata = null;
 
     this.addEventListener("click", this.openIframe);
-    window.addEventListener("message", this.handleFrameMessages.bind(this));
+    this._boundHandleFrameMessages = this.handleFrameMessages.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    window.addEventListener("message", this._boundHandleFrameMessages);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener("message", this._boundHandleFrameMessages);
   }
 
   get metadata() {
@@ -67,27 +77,49 @@ export default class BecomeButton extends LitElement {
     this._metadata = value;
   }
 
-  handleFrameMessages({ origin, data }) {
-    /*if (origin !== this.signupHost) {
-      return;
-    }*/
-
+  handleFrameMessages({ data }) {
     try {
-      const { action, payload } = JSON.parse(data);
-      const [, actionName] = action.split("::");
-      switch (actionName) {
-        case Events.loaded:
-          this.disabled = false;
-          this.loading = false;
-          break;
-        case Events.exitedSdk:
-        case Events.userFinishedSdk:
-          this.removeFrame();
-          break;
+      let parsedData;
+
+      // Check if data is already an object
+      if (typeof data === "string") {
+        try {
+          parsedData = JSON.parse(data);
+        } catch (e) {
+          // If it's not valid JSON, it's likely not our message, so we ignore it silently
+          return;
+        }
+      } else if (typeof data === "object" && data !== null) {
+        parsedData = data;
+      } else {
+        return;
       }
-      this.emitEvent(actionName, payload);
+
+      if (!parsedData?.action || !parsedData?.payload) {
+        return;
+      }
+
+      const { action, payload } = parsedData;
+
+      // Check if action is defined and is a string
+      if (typeof action === "string" && action.includes("::")) {
+        const [, actionName] = action.split("::");
+        switch (actionName) {
+          // Handle different actions
+          case Events.loaded:
+            this.disabled = false;
+            this.loading = false;
+            break;
+          case Events.exitedSdk:
+          case Events.userFinishedSdk:
+            this.removeFrame();
+            break;
+        }
+        this.emitEvent(actionName, payload);
+      }
     } catch (e) {
-      console.error("Become: unable to read info from become popup", e);
+      // We only reach here if something genuinely went wrong during processing
+      console.error("Become: error processing message from popup", e);
       this.emitEvent(Events.error, e);
     }
   }
@@ -96,7 +128,7 @@ export default class BecomeButton extends LitElement {
     const event = new CustomEvent(`${EventBase}:${name}`, {
       detail: {
         ...payload,
-      }
+      },
     });
     this.dispatchEvent(event);
   }
@@ -113,7 +145,14 @@ export default class BecomeButton extends LitElement {
     this.loading = true;
     this.removeFrame();
     const frame = document.createElement("become-frame");
-    for (const key of ["signupHost", "userId", "contractId", "token", "country", "state", "docType"]) {
+    for (const key of [
+      "signupHost",
+      "userId",
+      "contractId",
+      "token",
+      "country",
+      "state",
+    ]) {
       this[key] && frame.setAttribute(key, this[key]);
     }
     window.document.body.appendChild(frame);
@@ -128,7 +167,7 @@ export default class BecomeButton extends LitElement {
   async firstUpdated() {
     const api = `${this.apiHost}/api/v1/merchants/me`;
     const headers = {
-      authorization: `Bearer ${this.clientId}`
+      authorization: `Bearer ${this.clientId}`,
     };
     try {
       /*const response = await fetch(api, { headers });
@@ -141,12 +180,11 @@ export default class BecomeButton extends LitElement {
 
       setTimeout(() => {
         this.loading = false;
-      }, 1000)
-
+      }, 1000);
     } catch (e) {
-      setTimeout(()=>{
+      setTimeout(() => {
         this.loading = false;
-      }, 1000)
+      }, 1000);
       console.error("Become: unable to read data for the client");
     }
   }
