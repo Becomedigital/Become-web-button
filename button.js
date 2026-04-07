@@ -1,3 +1,6 @@
+/* eslint-disable no-undef */
+__webpack_public_path__ = "https://aval.svi.becomedigital.net/sdk/";
+
 const WEBCOMPONENTS_ROOT =
   "https://unpkg.com/@webcomponents/webcomponentsjs@2.3.0/";
 window.WebComponents = window.WebComponents || {};

@@ -3,7 +3,7 @@ const { LimitChunkCountPlugin } = require("webpack").optimize;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
-const ASSETS_PATH = process.env.ASSETS_PATH || "auto";
+const ASSETS_PATH = process.env.ASSETS_PATH || "https://aval.svi.becomedigital.net/sdk/";
 
 module.exports = {
   mode: "production",
