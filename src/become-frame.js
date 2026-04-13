@@ -1,23 +1,6 @@
 import { LitElement, html, css } from "lit-element";
 
 export default class BecomeFrame extends LitElement {
-<<<<<<< HEAD
-    static get properties() {
-        return {
-            clientId: {type: String},
-            token: {type: String},
-            userId: {type: String},
-            contractId: {type: String},
-            country: {type: String},
-            docType: {type: String},
-            state: {type: String},
-            disabled: {type: Boolean, reflect: true},
-            signupHost: {type: String},
-            metadata: {type: String},
-            flowId: {type: String}
-        };
-    }
-=======
   static get properties() {
     return {
       clientId: { type: String },
@@ -34,7 +17,6 @@ export default class BecomeFrame extends LitElement {
       flow: { type: String },
     };
   }
->>>>>>> dev
 
   static get styles() {
     return css`
@@ -61,21 +43,6 @@ export default class BecomeFrame extends LitElement {
     this.metadata = null;
   }
 
-<<<<<<< HEAD
-    render() {
-        const url = new URL(this.signupHost);
-        [["accessToken", this.token], ["userId", this.userId], ["contractId", this.contractId], ["country", this.country], ["state", this.state], ["docType", this.docType]]
-            .filter(([unused, value]) => value)
-            .forEach(([attr, value]) => url.searchParams.append(attr, value));
-        return html`
-            <iframe
-                    frameborder="0"
-                    src="${url}"
-                    allow="geolocation; microphone; camera; midi; encrypted-media;"
-            ></iframe>
-        `;
-    }
-=======
   render() {
     const url = new URL(this.signupHost);
     [
@@ -98,6 +65,5 @@ export default class BecomeFrame extends LitElement {
       ></iframe>
     `;
   }
->>>>>>> dev
 }
 customElements.define("become-frame", BecomeFrame);
