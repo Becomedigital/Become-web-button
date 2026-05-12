@@ -36,6 +36,7 @@ export default class BecomeButton extends LitElement {
       metadata: { type: String },
       brand: { type: String },
       flow: { type: String },
+      ocrTimeout: { type: String },
     };
   }
 
@@ -148,6 +149,7 @@ export default class BecomeButton extends LitElement {
       "docType",
       "brand",
       "flow",
+      "ocrTimeout",
     ]) {
       this[key] && frame.setAttribute(key, this[key]);
     }
