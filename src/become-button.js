@@ -104,7 +104,8 @@ export default class BecomeButton extends LitElement {
             break;
           case Events.exitedSdk:
           case Events.userFinishedSdk:
-            this.removeFrame();
+            // Delay frame removal to ensure all events are processed
+            setTimeout(() => this.removeFrame(), 500);
             break;
         }
         this.emitEvent(actionName, payload);
