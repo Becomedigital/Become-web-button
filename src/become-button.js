@@ -36,6 +36,7 @@ export default class BecomeButton extends LitElement {
       metadata: { type: String },
       brand: { type: String },
       flow: { type: String },
+      ocrTimeut: { type: String },
     };
   }
 
