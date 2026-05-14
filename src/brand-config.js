@@ -3,6 +3,7 @@ import BancoAvVillasLogo from "./brand-logos/banco_avvillas.png";
 import BancoPopularLogo from "./brand-logos/banco_popular.png";
 import BancoOccidenteLogo from "./brand-logos/banco_occidente.png";
 import AdlLogo from "./brand-logos/logo_adl.png";
+import DaleLogo from "./brand-logos/dale.svg";
 import DefaultLogo from "./logo192.jpg";
 
 export const BRAND_MAP = {
@@ -22,6 +23,15 @@ export const BRAND_MAP = {
     },
     layout: {
       radiusButton: "32px",
+    },
+  },
+  dale: {
+    logo: DaleLogo,
+    colors: {
+      primary: "#ff003f",
+    },
+    layout: {
+      radiusButton: "100px",
     },
   },
   bpop: {
