@@ -8,39 +8,32 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Test Become button</title>
-    <script src="./button.js"></script>
+    <!-- <script src="https://onboarding.svi.becomedigital.net/resources/button.js"></script> -->
   </head>
   <body>
-    <!--docType full list, same behaviour if ommited-->
     <become-button
-      token="<YOUR_JWT_HERE>"
-      userId="<YOUR_USER_ID_HERE>"
+      token="TOKEN_HERE"
+      userId="demo"
+      country="US"
+      state="FL"
       contractId="1"
-      docType="national-id,passport,driving-license" 
       color="blue"
-      language="en"
+      language="es"
+      class="be-button"
+      id="becomeButton"
     ></become-button>
     <script type="text/javascript">
       const query = new URLSearchParams(location.search);
       // create button
       const button = document.createElement("become-button");
-
       // setup attributes
-      button.setAttribute("clientid", query.get("clientid"));
+      button.setAttribute("userId", query.get("clientid"));
       button.setAttribute("token", query.get("token"));
+      button.setAttribute("contractId", query.get("contractid"));
 
       // setup callbacks
       button.addEventListener("become:loaded", ({ detail }) => {
         console.log("loaded payload", detail);
-      });
-      button.addEventListener("become:frontDocumentImage", ({ detail }) => {
-        console.log("Front Image", detail);
-      });
-      button.addEventListener("become:backDocument", ({ detail }) => {
-        console.log("Back Image", detail);
-      });
-      button.addEventListener("become:selfieImage", ({ detail }) => {
-        console.log("Selfie Image", detail);
       });
       button.addEventListener("become:userFinishedSdk", ({ detail }) => {
         console.log("finished payload", detail);
@@ -49,35 +42,26 @@
         console.log("exited payload", detail);
       });
 
+      button.addEventListener("become:initWarning", ({ detail }) => {
+        console.log("initWarning", detail);
+      });
+
+      button.addEventListener("become:stepLifecycleEvent", ({ detail }) => {
+        console.log("stepLifecycleEvent", detail);
+      });
+
       // init button
       document.body.appendChild(button);
-
-      // The functions below are for testing purposes only.
-      // It is recommended to pass the user ID from the backend
-      // to ensure proper tracking or to generate it according to the business rules.
-
-
-      // Function to generate a UUID
-      function generateUUID() {
-        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(
-          c
-        ) {
-          var r = (Math.random() * 16) | 0,
-            v = c === "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        });
-      }
-
-      // Function to set the UUID to the become-button element
-      function setUUID() {
-        const becomeButton = document.querySelector("become-button");
-        const uuid = generateUUID();
-        becomeButton.setAttribute("userId", uuid);
-      }
-
-      // Wait for the DOM to load before setting the UUID
-      document.addEventListener("DOMContentLoaded", (event) => {
-        setUUID();
+      const button2 = document.getElementById("becomeButton");
+      // setup callbacks
+      button2.addEventListener("become:loaded", ({ detail }) => {
+        console.log("loaded payload", detail);
+      });
+      button2.addEventListener("become:userFinishedSdk", ({ detail }) => {
+        console.log("finished payload", detail);
+      });
+      button2.addEventListener("become:exitedSdk", ({ detail }) => {
+        console.log("exited payload", detail);
       });
     </script>
   </body>
