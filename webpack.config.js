@@ -3,8 +3,6 @@ const { LimitChunkCountPlugin } = require("webpack").optimize;
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 
-const ASSETS_PATH = process.env.ASSETS_PATH || "./";
-
 module.exports = {
   mode: "production",
   entry: {
@@ -12,7 +10,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "build"),
-    publicPath: ASSETS_PATH,
+    publicPath: "auto",
     filename: "[name].[contenthash].js",
   },
   module: {
