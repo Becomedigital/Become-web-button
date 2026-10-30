@@ -37,6 +37,7 @@ export default class BecomeButton extends LitElement {
       brand: { type: String },
       flow: { type: String },
       ocrTimeout: { type: String },
+      phoneNumberEnc: { type: String},
     };
   }
 
@@ -53,7 +54,7 @@ export default class BecomeButton extends LitElement {
     this.disabled = true;
     this.loading = true;
     this.apiHost = "https://api.svi.becomedigital.net";
-    this.signupHost = "https://onboarding.svi.becomedigital.net";
+    this.signupHost = "https://identity.svi.becomedigital.net";
     [this.language] = navigator.language.split("-");
     this.metadata = null;
 
@@ -149,6 +150,7 @@ export default class BecomeButton extends LitElement {
       "brand",
       "flow",
       "ocrTimeout",
+      "phoneNumberEnc",
     ]) {
       this[key] && frame.setAttribute(key, this[key]);
     }

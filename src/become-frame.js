@@ -16,6 +16,7 @@ export default class BecomeFrame extends LitElement {
       brand: { type: String },
       flow: { type: String },
       ocrTimeout: { type: String },
+      phoneNumberEnc: { type: String },
     };
   }
 
@@ -56,6 +57,7 @@ export default class BecomeFrame extends LitElement {
       ["brand", this.brand],
       ["flow", this.flow],
       ["ocrTimeout", this.ocrTimeout],
+      ["phoneNumberEnc", this.phoneNumberEnc]
     ]
       .filter(([_, value]) => value)
       .forEach(([attr, value]) => url.searchParams.append(attr, value));
