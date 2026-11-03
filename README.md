@@ -1,163 +1,126 @@
-# Integrate [Become](https://becomedigital.ai/) KYC Service into Your Website with the Become KYC Web Button
+# Integrate Become KYC into Your Website
 
-Add the Become KYC button to your website to allow users to complete the Know Your Customer (KYC) process smoothly.
+Add identity verification (Know Your Customer, KYC) to your website with a single tag. Your users verify their identity with a document photo and a selfie, without leaving your page.
 
-## Usage in Your Code:
+## Prerequisites
 
-To include the Become KYC button in your website, simply add the following HTML tag to your page:
+Before you start, you need:
+
+| Item | What it is | Where you use it |
+|------|------------|------------------|
+| Assigned credentials | API credentials assigned to your account | Your backend only, to request the access token |
+| Contract ID | Identifies your contract and its configuration | `contract-id` attribute |
+| Access token | A JWT that authorizes the verification | `access-token` attribute, from your backend |
+| User ID | Your identifier for the person being verified | `user-id` attribute (optional in `onboarding`, required in `reverification`) |
+| Flow | `onboarding` (default) or `reverification` | `flow` attribute |
+| Redirect URL | Where the browser goes when the person finishes | `redirect-url` attribute |
+
+Your backend requests the access token with your assigned credentials and passes only the resulting JWT to the page. Never put your assigned credentials in a page, a script, or a link.
+
+## Three ways to add it
+
+| Option | Tag / Method | Best for |
+|--------|--------------|----------|
+| Become Button | `<become-button>` | A ready-made button that opens the verification when clicked |
+| Become KYC SDK | `<become-kyc-sdk>` | Placing the verification flow directly inside your own layout |
+| Hosted web | Verification link | Sending a verification link (email, SMS, WhatsApp, QR code) |
+
+All three run the same verification flow and use the same contract configuration.
+
+## Become Button
+
+**1. Add the script:**
+
+```html
+<script src="https://websdk.svi.becomedigital.net/sdk/become-web-button.js"></script>
+```
+
+**2. Add the button:**
 
 ```html
 <become-button
-  userId="<YOUR_USER_ID>"
-  contractId="<YOUR_CONTRACT_ID>"
-  token="<YOUR_JWT_TOKEN>"
-/>
+  contract-id="<YOUR_CONTRACT_ID>"
+  access-token="<YOUR_JWT_TOKEN>"
+  user-id="<YOUR_USER_ID>"
+></become-button>
 ```
 
-How It Looks on Your Page:
+`contract-id` and `access-token` are required.
 
-<img src="https://gist.githubusercontent.com/Tyg0th/15c5131ef7d2b24b9effa97eb45dedce/raw/07a5e1f3e428bd1d32bfe2940591872e1ae1ec2d/become-button-example.jpg" width="211" />
+## Become KYC SDK
 
-## Integration Steps
-
-- Add the Script: Include the following script in your HTML <head> or before the closing <body> tag:
+**1. Add the script:**
 
 ```html
-<script src="https://onboarding.svi.becomedigital.net/resources/button.js"></script>
+<script src="https://websdk.svi.becomedigital.net/sdk/become-kyc-sdk.js"></script>
 ```
 
-- Declare Required Attributes: Use the <become-button> custom element and provide the required attributes such as userId, contractId, and token:
+**2. Add the component inside a container with a size:**
 
 ```html
-<become-button
-  userId="<YOUR_USER_ID>"
-  contractId="<YOUR_CONTRACT_ID>"
-  token="<YOUR_JWT_TOKEN>"
-/>
+<div style="width: 100%; max-width: 480px; height: 640px;">
+  <become-kyc-sdk
+    contract-id="<YOUR_CONTRACT_ID>"
+    access-token="<YOUR_JWT_TOKEN>"
+    user-id="<YOUR_USER_ID>"
+  ></become-kyc-sdk>
+</div>
 ```
 
-- Dynamically Create the Button with JavaScript: Alternatively, you can dynamically create the button using JavaScript, like so:
+Give the container at least 280px wide and 560px tall. The verification starts as soon as the component is on the page.
 
-```js
-const button = document.createElement("become-button");
-button.setAttribute("userId", "user_12345");
-button.setAttribute("contractId", "contract_67890");
-button.setAttribute("token", "your_jwt_token_here");
-document.body.appendChild(button);
+## Hosted web (verification link)
+
+Send users to the verification as a link — no code on your page. Build the link on your backend so every value is URL-encoded:
+
+```
+https://websdk.svi.becomedigital.net/?contractId=<YOUR_CONTRACT_ID>&accessToken=<YOUR_JWT_TOKEN>&userId=<YOUR_USER_ID>&redirectUrl=https://example.com/verification-complete
 ```
 
-## API Reference
+The link opens full screen. Your system learns about completion from the webhook notification (the hosted page emits no browser events to your application).
 
-KYC (Know Your Customer) Process
+## Common attributes
 
-The KYC button integrates the onboarding process for verifying users' identities. When users click on the button, the system initiates the KYC process, requiring the user to upload an identity document or authenticate using other methods.
+| Attribute | Description |
+|-----------|-------------|
+| `contract-id` | Required. The contract identifier for your KYC process |
+| `access-token` | Required. A JWT created with your company credentials |
+| `user-id` | Optional in `onboarding`, required in `reverification` |
+| `flow` | `onboarding` (default) or `reverification` |
+| `locale` | Language of the texts. Default: `es` |
+| `country` | A 2-letter country code, for example `CO` or `FR` |
+| `doc-type` | `national-id`, `passport`, `driving-license` |
+| `redirect-url` | The page the browser opens after a successful verification |
+| `theme-mode` | `light` (default), `dark`, or `system` |
+| `mode` | Button: `overlay` (default), `embed`, `fullscreen`. SDK: `embed` (default), `overlay`, `fullscreen` |
 
-Button Attributes
-
-| Attribute Name | Description                                                                                                                                                                                      |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| userId         | A unique identifier for the user undergoing KYC verification.                                                                                                                                    |
-| contractId     | The contract identifier associated with the KYC process.                                                                                                                                         |
-| token          | A JWT token created using company credentials, used for secure API requests.                                                                                                                     |
-| country        | A 2-character country code (default: "CO" for Colombia). Example: "FR" for France.                                                                                                               |
-| state          | A 2-character state code (only required for users from the US when the country is set to "US").                                                                                                  |
-| docType        | Defines the type(s) of documents that can be used for KYC verification. This can be a single string or a comma-separated list of strings. Valid options: national-id, passport, driving-license. |
-
-### Example of docType Usage:
-
-Single Document Type (String):
-
-```html
-<become-button
-  userId="<YOUR_USER_ID>"
-  contractId="<YOUR_CONTRACT_ID>"
-  token="<YOUR_JWT_TOKEN>"
-  docType="passport"
-/>
-```
-
-Multiple Document Types (Comma-Separated List):
-
-```html
-<become-button
-  userId="<YOUR_USER_ID>"
-  contractId="<YOUR_CONTRACT_ID>"
-  token="<YOUR_JWT_TOKEN>"
-  docType="passport,national-id,driving-license"
-/>
-```
-
-Note: If single document is provided the system will use it as default. If multiple document types are provided as a comma-separated string, the system will accept only the specified document types.
+Attribute names can also be written in camelCase (`contractId`, `userId`, `docType`, ...), and `token` is accepted for `access-token`.
 
 ## Events
 
-The KYC button emits events to notify your application about the verification process. Below are the key events you can subscribe to:
+Listen on the element to know what happened:
 
-| Event Name                 | Description                                                              |
-| -------------------------- | ------------------------------------------------------------------------ |
-| become:verificationStarted | Fired when the KYC verification process begins.                          |
-| become:userFinishedSdk     | Fired when the user completes the KYC verification process successfully. |
-| become:exitedSdk           | Fired when the user exits the KYC process manually.                      |
-
-### Example Event Listener:
+| Product | Events |
+|---------|--------|
+| `<become-button>` | `become:result`, `become:userFinishedSdk`, `become:exitedSdk`, `become:errorSdk` |
+| `<become-kyc-sdk>` | `become-kyc:ready`, `become-kyc:event`, `become-kyc:error`, `become-kyc:warning` |
 
 ```js
-document
-  .querySelector("become-button")
-  .addEventListener("become:userFinishedSdk", (event) => {
-    console.log("User has completed the KYC verification:", event.detail);
-  });
-
-// Or using destructuring:
-
-document
-  .querySelector("become-button")
-  .addEventListener("become:userFinishedSdk", ({ detail }) => {
-    console.log("finished payload", detail);
-  });
+const button = document.querySelector('become-button');
+button.addEventListener('become:result', ({ detail }) => {
+  console.log('Verification completed:', detail.data);
+});
 ```
 
-### Example Usage:
+Events do not deliver the transaction results — retrieve them from your backend with the API after the webhook notification.
 
-Here’s an example of how to integrate the KYC button in your website using Vanilla JavaScript:
+## Methods
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Become KYC Integration</title>
-    <script src="https://onboarding.svi.becomedigital.net/resources/button.js"></script>
-  </head>
-  <body>
-    <!-- Become KYC Button -->
-    <become-button
-      userId="user123"
-      contractId="contract456"
-      token="your-jwt-token"
-      country="US"
-      state="NY"
-      docType="passport, national-id"
-    ></become-button>
+| Method | `<become-button>` | `<become-kyc-sdk>` |
+|--------|-------------------|--------------------|
+| `setConfig(config)` | ✅ | ✅ |
+| `getConfig()` | ✅ | ✅ |
+| `click()` | ✅ | |
+| `getResolvedSteps()` | | ✅ |
 
-    <script>
-      // Example event listener for handling events from the Become KYC button
-      document
-        .querySelector("become-button")
-        .addEventListener("become:userFinishedSdk", function(event) {
-          console.log("User has completed the KYC process", event.detail);
-        });
-    </script>
-  </body>
-</html>
-```
-
-Summary:
-
-- Integration: Add the script and the <become-button> element to your HTML with the necessary attributes.
-- Attributes: Pass information like userId, contractId, token, country, state, and docType.
-- Events: Subscribe to events to monitor the progress of the KYC verification.
-
-### Full Example:
-
-- Vanilla JS: see [`index.html`](index.html)
+More details are in [en/](en/) (English) and [es/](es/) (Spanish).
